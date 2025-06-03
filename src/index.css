@@ -1,1 +1,231 @@
 @import "tailwindcss";
+
+/* Base editor wrapper, can be used for positioning context */
+.tiptap-editor-wrapper {
+  position: relative;
+}
+
+/* The .tiptap class is applied by Tiptap to the editable ProseMirror instance. */
+.tiptap {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+  padding: 1rem; /* Apply padding directly to the editable area */
+  border: 1px solid theme('colors.gray.300');
+  border-radius: 0.375rem; /* Tailwind's rounded-md */
+  min-height: 200px; /* Slightly increased min-height */
+  background-color: white;
+  color: theme('colors.gray.800');
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dark .tiptap {
+  border-color: theme('colors.gray.600');
+  background-color: theme('colors.gray.900'); /* Dark mode background for editor */
+  color: theme('colors.gray.200');
+}
+
+.tiptap:focus, .ProseMirror-focused { /* .ProseMirror-focused is also added by Tiptap on focus */
+  outline: none;
+  border-color: theme('colors.blue.500');
+  box-shadow: 0 0 0 2px theme('colors.blue.500 / 30%');
+}
+
+.dark .tiptap:focus, .dark .ProseMirror-focused {
+  border-color: theme('colors.blue.400');
+  box-shadow: 0 0 0 2px theme('colors.blue.400 / 30%');
+}
+
+/* General ProseMirror element styling */
+.ProseMirror > * + * {
+  margin-top: 0.75em; /* Consistent spacing between direct children of the editor */
+}
+
+.ProseMirror p {
+  margin-bottom: 0.25em; /* Fine-tune paragraph bottom margin */
+}
+
+.ProseMirror h1, .ProseMirror h2, .ProseMirror h3, .ProseMirror h4, .ProseMirror h5, .ProseMirror h6 {
+  margin-top: 1.5em; /* Adjusted top margin for headings */
+  margin-bottom: 0.75em;
+  font-weight: 600; /* Tailwind's font-semibold */
+  line-height: 1.3;
+}
+.dark .ProseMirror h1, .dark .ProseMirror h2, .dark .ProseMirror h3, .dark .ProseMirror h4, .dark .ProseMirror h5, .dark .ProseMirror h6 {
+  color: theme('colors.gray.100');
+}
+
+.ProseMirror h1 { font-size: 2.25em; } /* ~36px */
+.ProseMirror h2 { font-size: 1.875em; } /* ~30px */
+.ProseMirror h3 { font-size: 1.5em; } /* ~24px */
+.ProseMirror h4 { font-size: 1.25em; } /* ~20px */
+.ProseMirror h5 { font-size: 1.125em; } /* ~18px */
+.ProseMirror h6 { font-size: 1em; } /* ~16px */
+
+.ProseMirror ul, .ProseMirror ol {
+  padding-left: 1.75rem; /* Indentation for lists */
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+}
+.ProseMirror ul { list-style-type: disc; }
+.ProseMirror ol { list-style-type: decimal; }
+.ProseMirror li > p { margin-bottom: 0.1em; } /* Reduce space within list items if they contain paragraphs */
+.ProseMirror li > ul, .ProseMirror li > ol { margin-top: 0.25em; } /* Spacing for nested lists */
+
+.ProseMirror blockquote {
+  border-left: 3px solid theme('colors.gray.400');
+  margin-left: 0; /* Remove default browser margin if any, control with padding */
+  padding-left: 1rem;
+  font-style: italic;
+  color: theme('colors.gray.600');
+}
+.dark .ProseMirror blockquote {
+  border-color: theme('colors.gray.500');
+  color: theme('colors.gray.400');
+}
+
+.ProseMirror pre {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  background: theme('colors.gray.100');
+  border: 1px solid theme('colors.gray.200');
+  border-radius: 0.25rem; /* Tailwind's rounded-sm or rounded */
+  padding: 0.75rem 1rem;
+  white-space: pre-wrap;
+  color: theme('colors.gray.800');
+  font-size: 0.9em;
+}
+.dark .ProseMirror pre {
+  background: theme('colors.gray.800');
+  border-color: theme('colors.gray.700');
+  color: theme('colors.gray.200');
+}
+
+.ProseMirror code { /* Inline code */
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  background-color: theme('colors.gray.100');
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.85em;
+  color: theme('colors.pink.600'); /* Example color for inline code */
+}
+.dark .ProseMirror code {
+  background-color: theme('colors.gray.700');
+  color: theme('colors.pink.400');
+}
+
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid theme('colors.gray.300');
+  margin: 1.5em 0;
+}
+.dark .ProseMirror hr {
+  border-top-color: theme('colors.gray.600');
+}
+
+.ProseMirror a {
+  color: theme('colors.blue.600');
+  text-decoration: underline;
+  cursor: pointer;
+}
+.dark .ProseMirror a {
+  color: theme('colors.blue.400');
+}
+
+/* Placeholder styling */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: theme('colors.gray.400');
+  pointer-events: none;
+  height: 0;
+}
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: theme('colors.gray.500');
+}
+
+
+/* Selection Toolbar (BubbleMenu) & Slash Command Dropdown (Tippy) */
+/* These are largely styled by Tailwind utility classes in their respective .tsx files */
+/* However, we can add some global Tippy theme overrides if needed */
+
+/* General Tippy box styling for consistency if not using a pre-built Tippy theme */
+.tippy-box {
+  /* background-color: theme('colors.white'); Tailwind handles this in the component */
+  /* color: theme('colors.gray.800'); */
+  /* border-radius: 0.375rem; /* rounded-md */
+  /* box-shadow: theme('boxShadow.lg'); */
+  /* border: 1px solid theme('colors.gray.200'); */
+}
+.dark .tippy-box {
+  /* background-color: theme('colors.gray.800'); */
+  /* color: theme('colors.gray.200'); */
+  /* border-color: theme('colors.gray.700'); */
+}
+
+/* Ensure Tippy content (where React components are rendered) has no default padding */
+.tippy-content {
+  padding: 0;
+  background-color: transparent; /* Let the inner components manage their background */
+}
+
+/* Specific class for slash command list popup to ensure styles don't bleed if other tippy instances are used */
+.slash-command-tippy-box .tippy-content {
+  /* Styles from .slash-command-list in SlashCommandsList.tsx will apply */
+}
+
+/* Add a subtle focus ring for toolbar buttons for keyboard navigation if not already clear */
+/* This is generally handled by Tailwind's focus utilities on the buttons themselves,
+   but as a fallback or explicit style: */
+/*
+.selection-toolbar-bubble-menu button:focus-visible,
+.slash-command-list button:focus-visible {
+  outline: 2px solid theme('colors.blue.500');
+  outline-offset: 1px;
+}
+.dark .selection-toolbar-bubble-menu button:focus-visible,
+.dark .slash-command-list button:focus-visible {
+  outline-color: theme('colors.blue.400');
+}
+*/
+
+/* Callout Node Styling */
+.callout-node {
+  display: flex;
+  align-items: flex-start; /* Align icon and content to the top */
+  padding: 0.75rem; /* 12px */
+  border-radius: 0.375rem; /* 6px, Tailwind's rounded-md */
+  margin-top: 0.75em; /* Consistent with other block elements */
+  margin-bottom: 0.75em;
+  /* Background color is applied via Tailwind classes directly on the element by CalloutExtension.ts */
+}
+
+.callout-node::before {
+  content: attr(data-icon); /* Display the icon from data-icon attribute */
+  margin-right: 0.75rem; /* Spacing between icon and content */
+  font-size: 1.25em;   /* Make icon slightly larger */
+  line-height: 1.5;    /* Adjust line-height to better align with the first line of text in the content. May need tweaking. */
+  /* For SVGs or font icons, you might set color here. Emojis typically use text color. */
+  /* color: theme('colors.gray.700'); */
+  /* .dark & { color: theme('colors.gray.300'); } */
+}
+
+/* Ensure content within the callout doesn't have excessive top/bottom margins for the first/last child */
+.callout-node > .ProseMirror-node-content-wrapper > :first-child {
+  margin-top: 0;
+}
+
+.callout-node > .ProseMirror-node-content-wrapper > :last-child {
+  margin-bottom: 0;
+}
+
+/* Example of specific background and icon color if not using Tailwind utility classes for background */
+/*
+.callout-node.bg-custom-yellow {
+  background-color: #fffbeb; // Example custom yellow
+}
+.dark .callout-node.bg-custom-yellow {
+  background-color: #42300f; // Darker custom yellow
+}
+.callout-node.icon-custom-color::before {
+  color: #d97706; // Example custom icon color
+}
+*/
