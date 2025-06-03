@@ -1,5 +1,5 @@
 import { Editor, Range } from '@tiptap/react'; // Import Range
-import { Heading1, Heading2, Heading3, Pilcrow, List, ListOrdered, LucideIcon, Megaphone } from 'lucide-react'; // Added Megaphone
+import { Heading1, Heading2, Heading3, Pilcrow, List, ListOrdered, LucideIcon, Megaphone, Highlighter } from 'lucide-react'; // Added Megaphone
 
 /**
  * Represents a single command available through the slash command menu.
@@ -65,15 +65,27 @@ export const slashCommands: SlashCommandItem[] = [
     icon: Megaphone,
     command: ({ editor, range }) => {
       // Ensure range is defined before attempting to delete
+      console.log({range});
       if (range) {
-        editor.chain().focus().deleteRange(range).setCallout().run();
+      editor.chain().focus().deleteRange(range).setCallout({ icon: '💡', backgroundColor: 'bg-yellow-100 dark:bg-yellow-800' }).run();
+
+        // editor.chain().focus().deleteRange(range).setCallout().run();
       } else {
         editor.chain().focus().setCallout().run();
       }
       // To set specific attributes:
       // editor.chain().focus().deleteRange(range).setCallout({ icon: '💡', backgroundColor: 'bg-yellow-100 dark:bg-yellow-800' }).run();
+      // editor.chain().focus().setCallout({ icon: '💡', backgroundColor: 'bg-yellow-100 dark:bg-yellow-800' }).run();
     },
   },
+  {
+    title: "Highlight",
+    description: "Highlight your block",
+    icon: Highlighter,
+    command({ editor, range }) {
+      console.log({editor, range});
+    },
+  }
   // Add more commands as needed
 ];
 

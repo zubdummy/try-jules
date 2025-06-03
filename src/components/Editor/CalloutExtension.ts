@@ -1,4 +1,4 @@
-import { Node, mergeAttributes } from '@tiptap/core';
+import { Node, mergeAttributes } from '@tiptap/react';
 
 /**
  * Interface for the attributes of a CalloutNode.
@@ -12,7 +12,7 @@ export interface CalloutNodeAttributes {
 
 // Augment Tiptap's command interface to include the `setCallout` command.
 // This provides type safety when using `editor.commands.setCallout()`.
-declare module '@tiptap/core' {
+declare module '@tiptap/react' {
   interface Commands<ReturnType> {
     callout: {
       /**
@@ -66,7 +66,7 @@ export const CalloutNode = Node.create<CalloutNodeAttributes>({
     return {
       icon: {
         default: '📣',
-        parseHTML: element => element.getAttribute('data-icon') || this.options.attrs.icon.default,
+        parseHTML: element => element.getAttribute('data-icon') || this.options.icon,
         renderHTML: attributes => {
           if (!attributes.icon) {
             return {};
@@ -76,7 +76,7 @@ export const CalloutNode = Node.create<CalloutNodeAttributes>({
       },
       backgroundColor: {
         default: 'bg-sky-100 dark:bg-sky-900',
-        parseHTML: element => element.getAttribute('data-background-color') || this.options.attrs.backgroundColor.default,
+        parseHTML: element => element.getAttribute('data-background-color') || this.options?.backgroundColor,
         renderHTML: attributes => {
           // This stores the value in data-background-color, useful for parsing back.
           // The actual class is applied in the main renderHTML function.
@@ -113,8 +113,12 @@ export const CalloutNode = Node.create<CalloutNodeAttributes>({
    * @returns {DOMOutputSpec} A DOM output specification.
    */
   renderHTML({ HTMLAttributes, node }) {
-    const currentIcon = node.attrs.icon || this.options.attrs.icon.default;
-    const currentBgColor = node.attrs.backgroundColor || this.options.attrs.backgroundColor.default;
+    const currentIcon = node.attrs.icon || this.options.icon;
+    const currentBgColor = node.attrs.backgroundColor || this.options.backgroundColor;
+    // const currentIcon = node.attrs.icon || this.options.attrs.icon.default;
+    // const currentBgColor = node.attrs.backgroundColor || this.options.attrs.backgroundColor.default;
+
+    console.log(this.options);
 
     let finalClass = 'callout-node'; // Base class for CSS styling
     if (currentBgColor) {
@@ -142,6 +146,10 @@ export const CalloutNode = Node.create<CalloutNodeAttributes>({
         // or back to a paragraph if already this type.
         // It also applies the provided attributes.
         return commands.toggleNode(this.name, 'paragraph', attributes);
+
+        // console.log(this);
+
+        // return commands.setNode(this.name, attributes);
       },
     };
   },

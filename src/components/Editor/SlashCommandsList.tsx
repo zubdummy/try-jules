@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { Editor } from '@tiptap/react';
 import { SlashCommandItem } from './slashCommands';
 
