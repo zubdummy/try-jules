@@ -5,6 +5,8 @@ import React from 'react';
 import SelectionToolbar from './SelectionToolbar';
 import { SlashCommand } from './SlashCommandExtension';
 import CalloutNode from './CalloutExtension'; // Import the CalloutNode
+import Placeholder from '@tiptap/extension-placeholder';
+import Highlight from '@tiptap/extension-highlight';
 
 // Placeholder for Tiptap's Placeholder extension, if you decide to use it.
 // import Placeholder from '@tiptap/extension-placeholder';
@@ -57,21 +59,20 @@ export interface RichTextEditorProps {
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ initialContent, onChange }) => {
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        // Example: Disable history if you want to manage it differently.
-        // history: false,
-        // Example: Configure Placeholder extension if added
-        // placeholder: {
-        //   placeholder: 'Type / for commands or start writing...',
-        // },
-      }),
+      StarterKit,
       Underline,
       SlashCommand,
       CalloutNode, // Add the CalloutNode to the extensions array
-      // Example: Add Placeholder extension
-      // Placeholder.configure({
-      //   placeholder: 'Type / for commands or write something …',
-      // }),
+      Placeholder.configure({
+        placeholder: 'Type / for commands or write something …',
+      }),
+      Highlight.configure({
+        multicolor: true,
+        HTMLAttributes: {
+          class: 'bg-emerald-500 p-1 rounded-md text-black',
+          // style: 'background-color:rgb(); color: #333;',
+        },
+      }),
     ],
     content: initialContent || '<p>Hello World! Type / for commands, or select text for formatting options.</p>',
     onUpdate: ({ editor: currentEditor }: { editor: TiptapEditor }) => {
@@ -89,11 +90,18 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ initialContent, onChang
     return null;
   }
 
+  const onSave = () => {
+    if (editor) {
+      const jsonOutput = editor.getJSON();
+      console.log(jsonOutput);
+    }
+  };
+
   return (
     // Optional wrapper for additional styling or context for the editor and its popups.
     // Can be useful if you need a specific positioning context for Tippy.js popups
     // if `appendTo: 'parent'` is used for Tippy, or for overall editor layout.
-    <div className="tiptap-editor-wrapper">
+    <div className="tiptap-editor-wrapper mx-3">
       <EditorContent editor={editor} />
       {editor && ( // Ensure editor is available before rendering BubbleMenu
         <BubbleMenu
@@ -104,6 +112,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ initialContent, onChang
           <SelectionToolbar editor={editor} />
         </BubbleMenu>
       )}
+      <button onClick={onSave} className='bg-emerald-500 hover:bg-emerald-600 transition-colors text-white px-4 py-1 rounded-md my-3 cursor-pointer'>Save</button>
     </div>
   );
 };

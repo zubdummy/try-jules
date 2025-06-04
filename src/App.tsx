@@ -3,8 +3,7 @@ import { RichTextEditor } from "./components/Editor";
 
 export default function App() {
   return (
-    <div>
-      <h1>Hello World</h1>
+    <div className="flex justify-center items-center h-screen bg-slate-200">
       <RichTextEditor />
     </div>
   );

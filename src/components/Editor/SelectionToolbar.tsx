@@ -1,6 +1,6 @@
 import React from 'react';
 import { Editor } from '@tiptap/react';
-import { Bold, Italic, Underline as UnderlineIcon, Strikethrough, LucideIcon } from 'lucide-react';
+import { Bold, Italic, Underline as UnderlineIcon, Strikethrough, Code, List, ListOrdered, Terminal, Highlighter } from 'lucide-react';
 
 /**
  * Props for the {@link SelectionToolbar} component.
@@ -65,6 +65,11 @@ const SelectionToolbar: React.FC<SelectionToolbarProps> = ({ editor }) => {
     { name: 'Italic', command: () => editor.chain().focus().toggleItalic().run(), isActive: editor.isActive('italic'), icon: Italic },
     { name: 'Underline', command: () => editor.chain().focus().toggleUnderline().run(), isActive: editor.isActive('underline'), icon: UnderlineIcon },
     { name: 'Strikethrough', command: () => editor.chain().focus().toggleStrike().run(), isActive: editor.isActive('strike'), icon: Strikethrough },
+    { name: 'Code', command: () => editor.chain().focus().toggleCode().run(), isActive: editor.isActive('code'), icon: Code },
+    { name: 'CodeBlock', command: () => editor.chain().focus().toggleCodeBlock().run(), isActive: editor.isActive('codeBlock'), icon: Terminal },
+    { name: 'BulletList', command: () => editor.chain().focus().toggleBulletList().run(), isActive: editor.isActive('bulletList'), icon: List },
+    { name: 'OrderedList', command: () => editor.chain().focus().toggleOrderedList().run(), isActive: editor.isActive('orderedList'), icon: ListOrdered },
+    { name: "Highlight", command: () => editor.chain().focus().toggleHighlight({ color: '#00bc7d' }).run(), isActive: editor.isActive('highlight'), icon: Highlighter },
   ];
 
   return (
